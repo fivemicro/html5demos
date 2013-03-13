@@ -40,10 +40,26 @@ function success(position) {
   });
 }
 
-function error(msg) {
+function error(e) {
   var s = document.querySelector('#status');
-  s.innerHTML = typeof msg == 'string' ? msg : "failed";
+  var message = "";
+  switch(e.code) {
+    case e.PERMISSION_DENIED:
+      message = "failed: permission denied";
+      break;
+    case e.POSITION_UNAVAILABLE:
+      message = "failed: position unavailable";
+      break;
+    case e.TIMEOUT:
+      message = "failed: timeout";
+      break;
+    default: 
+      message = "failed: unknown error" + e.code.toString();
+      break;
+  }
+  s.innerHTML = message;
   s.className = 'fail';
+  console.log(e.message);
 }
 
 if (navigator.geolocation) {
